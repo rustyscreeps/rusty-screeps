@@ -5,38 +5,34 @@ rust: nightly
 os:
   - linux
   - osx
-env:
-  matrix:
-    - TRAVIS_NODE_VERSION="11"
-    - TRAVIS_NODE_VERSION="10"
-    - TRAVIS_NODE_VERSION="8"
 before_install:
   - source $HOME/.nvm/nvm.sh
-  - nvm install ${TRAVIS_NODE_VERSION}
-  - nvm use ${TRAVIS_NODE_VERSION}
+  - nvm install 11
+  - nvm use 11
   - node -v
   - npm -v
 install:
   - rustup target add wasm32-unknown-unknown
-  - | # download cargo web
-    cargo_web_release=$(curl -L -s -H 'Accept: application/json' \
-        https://github.com/koute/cargo-web/releases/latest)
-    cargo_web_version=$(echo $cargo_web_release \
-        | sed -e 's/.*"tag_name":"\([^"]*\)".*/\1/')
-    if [ "$(uname -s)" == "Darwin" ]; then
-      cargo_web_host_triple="x86_64-apple-darwin"
-    else
-      cargo_web_host_triple="x86_64-unknown-linux-gnu"
-    fi
-    cargo_web_url_prefix="https://github.com/koute/cargo-web/releases/download"
-    cargo_web_url="$cargo_web_url_prefix/$cargo_web_version/cargo-web-$cargo_web_host_triple.gz"
+  - cargo install cargo-web
+  #- | # download cargo web
+  #  cargo_web_release=$(curl -L -s -H 'Accept: application/json' \
+  #      https://github.com/koute/cargo-web/releases/latest)
+  #  cargo_web_version=$(echo $cargo_web_release \
+  #      | sed -e 's/.*"tag_name":"\([^"]*\)".*/\1/')
+  #  if [ "$(uname -s)" == "Darwin" ]; then
+  #    cargo_web_host_triple="x86_64-apple-darwin"
+  #  else
+  #    cargo_web_host_triple="x86_64-unknown-linux-gnu"
+  #  fi
+  #  cargo_web_url_prefix="https://github.com/koute/cargo-web/releases/download"
+  #  cargo_web_url="$cargo_web_url_prefix/$cargo_web_version/cargo-web-$cargo_web_host_triple.gz"
 
-    echo "Downloading cargo-web from: $cargo_web_url"
-    curl -L "$cargo_web_url" | gzip -d > cargo-web
-    chmod +x cargo-web
+  #  echo "Downloading cargo-web from: $cargo_web_url"
+  #  curl -L "$cargo_web_url" | gzip -d > cargo-web
+  #  chmod +x cargo-web
 
-    mkdir -p ~/.cargo/bin
-    mv cargo-web ~/.cargo/bin
+  #  mkdir -p ~/.cargo/bin
+  #  mv cargo-web ~/.cargo/bin
 script:
   - cargo web build --target=wasm32-unknown-unknown
   - cargo web test --target=wasm32-unknown-unknown --nodejs
