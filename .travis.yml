@@ -2,11 +2,20 @@ language: rust
 sudo: false
 cache: cargo
 rust: nightly
-node_js:
-  - "11"
 os:
   - linux
   - osx
+env:
+  matrix:
+    - TRAVIS_NODE_VERSION="11"
+    - TRAVIS_NODE_VERSION="10"
+    - TRAVIS_NODE_VERSION="8"
+before_install:
+  - source $HOME/.nvm/nvm.sh
+  - nvm install ${TRAVIS_NODE_VERSION}
+  - nvm use ${TRAVIS_NODE_VERSION}
+  - node -v
+  - npm -v
 install:
   - rustup target add wasm32-unknown-unknown
   - | # download cargo web
