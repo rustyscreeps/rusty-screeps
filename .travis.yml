@@ -1,6 +1,8 @@
 language: rust
 sudo: false
-cache: cargo
+cache:
+  directories:
+    - /home/travis/.cargo
 rust: nightly
 os:
   - linux
@@ -14,27 +16,16 @@ before_install:
 install:
   - rustup target add wasm32-unknown-unknown
   - cargo install cargo-web
-  #- | # download cargo web
-  #  cargo_web_release=$(curl -L -s -H 'Accept: application/json' \
-  #      https://github.com/koute/cargo-web/releases/latest)
-  #  cargo_web_version=$(echo $cargo_web_release \
-  #      | sed -e 's/.*"tag_name":"\([^"]*\)".*/\1/')
-  #  if [ "$(uname -s)" == "Darwin" ]; then
-  #    cargo_web_host_triple="x86_64-apple-darwin"
-  #  else
-  #    cargo_web_host_triple="x86_64-unknown-linux-gnu"
-  #  fi
-  #  cargo_web_url_prefix="https://github.com/koute/cargo-web/releases/download"
-  #  cargo_web_url="$cargo_web_url_prefix/$cargo_web_version/cargo-web-$cargo_web_host_triple.gz"
+  - cargo install clippy
+jobs:
+  include:
+    - stage: build
+      script: cargo web build --target=wasm32-unknown-unknown
+    - stage: test
+      script: cargo web test --target=wasm32-unknown-unknown --nodejs
+    - stage: lint
+      script: cargo clippy
 
-  #  echo "Downloading cargo-web from: $cargo_web_url"
-  #  curl -L "$cargo_web_url" | gzip -d > cargo-web
-  #  chmod +x cargo-web
 
-  #  mkdir -p ~/.cargo/bin
-  #  mv cargo-web ~/.cargo/bin
-script:
-  - cargo web build --target=wasm32-unknown-unknown
-  - cargo web test --target=wasm32-unknown-unknown --nodejs
-  - cargo web build --target=wasm32-unknown-unknown --all-features
-  - cargo web test --target=wasm32-unknown-unknown --all-features --nodejs
+before_cache:
+  - rm -rf /home/travis/.cargo/registry
