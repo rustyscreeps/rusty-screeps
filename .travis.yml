@@ -2,6 +2,8 @@ language: rust
 sudo: false
 cache: cargo
 rust: nightly
+node_js:
+  - "11"
 os:
   - linux
   - osx
@@ -27,7 +29,7 @@ install:
     mkdir -p ~/.cargo/bin
     mv cargo-web ~/.cargo/bin
 script:
-  - cargo web build --target=wasm32-unknown-unknown --verbose
-  - cargo web test --target=wasm32-unknown-unknown --verbose --nodejs
-  - cargo web build --target=wasm32-unknown-unknown --all-features --verbose
-  - cargo web test --target=wasm32-unknown-unknown --all-features --verbose --nodejs
+  - cargo web build --target=wasm32-unknown-unknown
+  - cargo web test --target=wasm32-unknown-unknown --nodejs
+  - cargo web build --target=wasm32-unknown-unknown --all-features
+  - cargo web test --target=wasm32-unknown-unknown --all-features --nodejs
