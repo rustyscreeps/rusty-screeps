@@ -60,7 +60,7 @@ impl Spawn {
     pub fn spawn_job_creep(&self, body: &[Part], job: Job) -> ReturnCode {
         let name = screeps::game::time();
         let mut additional = 0;
-        let res = loop {
+        loop {
             let name = format!("{}:{}{}", job.as_str(), name, additional);
             let res = self.spawn_creep(&body, &name);
 
@@ -69,8 +69,7 @@ impl Spawn {
             } else {
                 break res;
             }
-        };
-        return res;
+        }
     }
 
     fn spawn_creep(&self, body: &[Part], name: &str) -> ReturnCode {

@@ -3,6 +3,7 @@ use std::collections::HashMap;
 
 const CONSIDER_CREEP_EXPIRED_AT: u32 = 150;
 
+#[derive(Default)]
 pub struct Game {
     pub counter: u32,
     pub creeps: HashMap<String, Creep>,

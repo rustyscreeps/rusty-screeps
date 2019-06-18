@@ -29,8 +29,7 @@ lazy_static! {
 }
 
 pub fn game<'a>() -> MutexGuard<'a, Game> {
-    let game: MutexGuard<Game> = GAME.lock().unwrap();
-    return game;
+    GAME.lock().unwrap()
 }
 
 pub fn init_screeps_connection(game_loop: &'static dyn Fn(&Game)) {

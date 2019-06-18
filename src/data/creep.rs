@@ -26,15 +26,15 @@ impl Creep {
     pub fn from(creep: screeps::Creep) -> Creep {
         let _source = creep.borrow();
         let name: String = _source.name();
-        let job_name: String = name.split(":").next().expect("invalid name!").to_string();
+        let job_name: String = name.split(':').next().expect("invalid name!").to_string();
         let spawning = _source.spawning();
         let carry_total = _source.carry_total();
         let carry_capacity = _source.carry_capacity();
-        let mut ticks_to_live: u32 = 1500;
-        if !spawning {
-            // this will panic otherwise
-            ticks_to_live = _source.ticks_to_live();
-        }
+        let ticks_to_live: u32 = if !spawning {
+            _source.ticks_to_live()
+        } else {
+            1500
+        };
         let pos = _source.pos();
         let room = _source.room();
         Creep {
@@ -45,7 +45,7 @@ impl Creep {
             ticks_to_live,
             pos,
             room,
-            job: Job::from_str(job_name),
+            job: Job::from_string(job_name),
             _source: creep,
         }
     }
@@ -140,14 +140,13 @@ pub enum Job {
 }
 
 impl Job {
-    pub fn from_str(job: String) -> Job {
+    fn from_string(job: String) -> Job {
         match job.as_str() {
             "Upgrader" => Job::Upgrader,
             "Starter" => Job::Starter,
             _ => Job::Unassigned,
         }
     }
-
     pub fn as_str(&self) -> &str {
         match self {
             Job::Upgrader => "Upgrader",

@@ -16,7 +16,7 @@ before_install:
 install:
   - rustup target add wasm32-unknown-unknown
   - cargo install cargo-web || true
-  - cargo install clippy || true
+  - rustup component add clippy-preview || true
 script:
   - cargo web build --target=wasm32-unknown-unknown
   - cargo web test --target=wasm32-unknown-unknown --nodejs

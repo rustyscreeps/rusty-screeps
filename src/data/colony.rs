@@ -19,7 +19,7 @@ impl Colony {
             _source: room,
             spawns: vec![],
             name,
-            stage: ColonyStage::from_str(memory.string("stage").unwrap().unwrap()),
+            stage: ColonyStage::from_string(memory.string("stage").unwrap().unwrap()),
         }
     }
 
@@ -50,7 +50,7 @@ pub enum ColonyStage {
 }
 
 impl ColonyStage {
-    pub fn from_str(stage: String) -> ColonyStage {
+    pub fn from_string(stage: String) -> ColonyStage {
         match stage.as_str() {
             "bootstrap" => ColonyStage::Bootstrap,
             "running" => ColonyStage::Running,
