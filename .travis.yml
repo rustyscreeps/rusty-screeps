@@ -17,14 +17,10 @@ install:
   - rustup target add wasm32-unknown-unknown
   - cargo install cargo-web || true
   - cargo install clippy || true
-jobs:
-  include:
-    - stage: build
-      script: cargo web build --target=wasm32-unknown-unknown
-    - stage: test
-      script: cargo web test --target=wasm32-unknown-unknown --nodejs
-    - stage: lint
-      script: cargo clippy
+script:
+  - cargo web build --target=wasm32-unknown-unknown
+  - cargo web test --target=wasm32-unknown-unknown --nodejs
+  - cargo +nightly clippy -Z unstable-options
 
 
 before_cache:
