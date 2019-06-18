@@ -15,8 +15,8 @@ before_install:
   - npm -v
 install:
   - rustup target add wasm32-unknown-unknown
-  - cargo install cargo-web
-  - cargo install clippy
+  - cargo install cargo-web || true
+  - cargo install clippy || true
 jobs:
   include:
     - stage: build

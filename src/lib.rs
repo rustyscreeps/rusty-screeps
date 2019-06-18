@@ -35,6 +35,14 @@ pub fn game<'a>() -> MutexGuard<'a, Game> {
 
 pub fn init_screeps_connection(game_loop: &'static dyn Fn(&Game)) {
     stdweb::initialize();
+    std::panic::set_hook(Box::new(|info| {
+        let value = &info.to_string();
+        let panic_message = value.to_owned();
+        js! { @(no_return)
+            console.error( @{value} );
+        }
+        panic!(panic_message);
+    }));
     logging::setup_logging(logging::Info);
     info!(
         "Global Reset! Compile took: {}",
