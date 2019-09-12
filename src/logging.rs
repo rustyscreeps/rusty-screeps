@@ -1,5 +1,5 @@
 pub use log::LevelFilter::*;
-
+use stdweb::js;
 struct JsLog;
 struct JsNotify;
 

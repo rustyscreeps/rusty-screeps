@@ -9,7 +9,7 @@ use screeps::Source;
 use screeps::StructureController;
 use screeps::{ConstructionSite, ResourceType, Transferable};
 use std::fmt;
-
+use stdweb::js;
 pub struct Creep {
     _source: screeps::Creep,
     name: String,

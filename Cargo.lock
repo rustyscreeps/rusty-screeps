@@ -194,7 +194,7 @@ dependencies = [
 
 [[package]]
 name = "rusty-screeps"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "fern 0.5.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
