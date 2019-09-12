@@ -1,5 +1,4 @@
-use crate::data::{Colony, Creep, Job, Spawn};
-use screeps::RoomName;
+use crate::data::{Creep, Job, Spawn};
 use std::collections::HashMap;
 
 const CONSIDER_CREEP_EXPIRED_AT: u32 = 150;
@@ -9,7 +8,6 @@ pub struct Game {
     pub counter: u32,
     pub creeps: HashMap<String, Creep>,
     pub spawns: HashMap<String, Spawn>,
-    pub colonies: HashMap<RoomName, Colony>,
 }
 
 impl Game {
@@ -18,7 +16,6 @@ impl Game {
             counter: 0,
             creeps: HashMap::new(),
             spawns: HashMap::new(),
-            colonies: HashMap::new(),
         }
     }
 
@@ -80,25 +77,6 @@ impl Game {
         }
     }
 
-    fn insert_spawn_into_colony(&mut self, spawn_id: &str) {
-        let spawn: &Spawn = self.spawns.get(spawn_id).unwrap();
-        let room_id = spawn.room_id();
-        match self.colonies.get_mut(room_id) {
-            Some(colony) => {
-                colony.register_spawn(spawn.name().to_string());
-            }
-            None => {
-                self.colonies
-                    .insert(room_id.clone(), Colony::from(spawn.room().to_owned()));
-                let colony = self
-                    .colonies
-                    .get_mut(room_id)
-                    .expect("colony insert failed");
-                colony.register_spawn(spawn.name().to_string());
-            }
-        }
-    }
-
     fn refresh_spawns(&mut self) {
         for spawn in screeps::game::spawns::values() {
             // hack to get typing to work
@@ -110,7 +88,6 @@ impl Game {
                 }
                 None => {
                     self.spawns.insert(_spawn.name(), Spawn::from(_spawn));
-                    self.insert_spawn_into_colony(&_name_str);
                 }
             }
         }
