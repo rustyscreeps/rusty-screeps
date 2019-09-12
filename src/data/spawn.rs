@@ -1,7 +1,8 @@
 use crate::data::Job;
 use core::borrow::Borrow;
 use screeps::{
-    CanStoreEnergy, HasPosition, Part, ReturnCode, Room, RoomObjectProperties, RoomPosition,
+    CanStoreEnergy, HasPosition, Part, ReturnCode, Room, RoomName, RoomObjectProperties,
+    RoomPosition,
 };
 
 pub struct Spawn {
@@ -9,7 +10,7 @@ pub struct Spawn {
     name: String,
     pos: RoomPosition,
     room: Room,
-    room_id: String,
+    room_id: RoomName,
 }
 
 impl Spawn {
@@ -45,7 +46,7 @@ impl Spawn {
         self.room.borrow()
     }
 
-    pub fn room_id(&self) -> &str {
+    pub fn room_id(&self) -> &RoomName {
         self.room_id.borrow()
     }
 

@@ -1,16 +1,17 @@
 use core::borrow::Borrow;
+use screeps::RoomName;
 
 pub struct Colony {
     _source: screeps::Room,
     spawns: Vec<String>,
-    name: String,
+    name: RoomName,
     stage: ColonyStage,
 }
 
 impl Colony {
     pub fn from(room: screeps::Room) -> Colony {
         let _source = room.borrow();
-        let name: String = _source.name();
+        let name: RoomName = _source.name();
         let memory = room.memory().dict_or_create("colony").unwrap();
         if !memory.bool("stage") {
             memory.set("stage", ColonyStage::Bootstrap.as_str())
@@ -27,7 +28,7 @@ impl Colony {
         self.spawns.push(spawn_id);
     }
 
-    pub fn name(&self) -> &str {
+    pub fn name(&self) -> &RoomName {
         self.name.borrow()
     }
 

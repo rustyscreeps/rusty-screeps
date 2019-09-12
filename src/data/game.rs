@@ -1,4 +1,5 @@
 use crate::data::{Colony, Creep, Job, Spawn};
+use screeps::RoomName;
 use std::collections::HashMap;
 
 const CONSIDER_CREEP_EXPIRED_AT: u32 = 150;
@@ -8,7 +9,7 @@ pub struct Game {
     pub counter: u32,
     pub creeps: HashMap<String, Creep>,
     pub spawns: HashMap<String, Spawn>,
-    pub colonies: HashMap<String, Colony>,
+    pub colonies: HashMap<RoomName, Colony>,
 }
 
 impl Game {
@@ -88,7 +89,7 @@ impl Game {
             }
             None => {
                 self.colonies
-                    .insert(room_id.to_string(), Colony::from(spawn.room().to_owned()));
+                    .insert(room_id.clone(), Colony::from(spawn.room().to_owned()));
                 let colony = self
                     .colonies
                     .get_mut(room_id)
