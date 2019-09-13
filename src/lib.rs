@@ -33,8 +33,9 @@ pub fn game<'a>() -> MutexGuard<'a, Game> {
 
 fn test_serde() -> Result<String, serde_json::Error> {
     let begin = screeps::game::cpu::get_used();
-    let task: Task = Harvest {}.into();
+    let task: Task = Harvest::default().into();
     let packed = serde_json::to_string(&task)?;
+    info!("packed into {}", packed);
     let unpacked: Task = serde_json::from_str(&packed)?;
     let end = screeps::game::cpu::get_used() - begin;
     info!("we took {}", end);
