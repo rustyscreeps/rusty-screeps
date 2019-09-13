@@ -6,6 +6,7 @@ extern crate lazy_static;
 
 use crate::data::Game;
 use crate::lazy_static::__Deref;
+use crate::tasks::{Harvest, Task, TaskTrait};
 use std::collections::HashSet;
 use std::sync::{Mutex, MutexGuard};
 use stdweb::js;
@@ -20,6 +21,7 @@ mod tests {
 
 pub mod data;
 pub mod logging;
+pub mod tasks;
 
 lazy_static! {
     static ref GAME: Mutex<Game> = Mutex::new(Game::new());
@@ -27,6 +29,16 @@ lazy_static! {
 
 pub fn game<'a>() -> MutexGuard<'a, Game> {
     GAME.lock().unwrap()
+}
+
+fn test_serde() -> Result<String, serde_json::Error> {
+    let begin = screeps::game::cpu::get_used();
+    let task: Task = Harvest {}.into();
+    let packed = serde_json::to_string(&task)?;
+    let unpacked: Task = serde_json::from_str(&packed)?;
+    let end = screeps::game::cpu::get_used() - begin;
+    info!("we took {}", end);
+    Ok(unpacked.name().to_string())
 }
 
 pub fn init_screeps_connection(game_loop: &'static dyn Fn(&Game)) {
@@ -66,6 +78,11 @@ pub fn init_screeps_connection(game_loop: &'static dyn Fn(&Game)) {
         "Global Reset! Compile took: {}",
         screeps::game::cpu::get_used()
     );
+
+    match test_serde() {
+        Ok(thetask) => info!("{}", thetask),
+        Err(theerror) => info!("{:?}", theerror),
+    }
 
     let _game_loop = move || {
         debug!("loop starting! CPU: {}", screeps::game::cpu::get_used());

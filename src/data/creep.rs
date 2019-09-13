@@ -136,6 +136,7 @@ impl Creep {
 pub enum Job {
     Upgrader,
     Starter,
+    Builder,
     Unassigned,
 }
 
@@ -144,6 +145,7 @@ impl Job {
         match job.as_str() {
             "Upgrader" => Job::Upgrader,
             "Starter" => Job::Starter,
+            "Builder" => Job::Builder,
             _ => Job::Unassigned,
         }
     }
@@ -151,6 +153,7 @@ impl Job {
         match self {
             Job::Upgrader => "Upgrader",
             Job::Starter => "Starter",
+            Job::Builder => "Builder",
             Job::Unassigned => "Unassigned",
         }
     }
