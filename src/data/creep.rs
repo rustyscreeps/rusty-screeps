@@ -54,6 +54,28 @@ impl Creep {
         }
     }
 
+    fn unpack_tasks(&self, creep: &screeps::Creep) -> Option<Vec<Task>> {
+        let _packed_tasks = creep.memory().string("tasks");
+        if _packed_tasks.is_err() {
+            error!("could not unpack!");
+        }
+        let packed_tasks = _packed_tasks.unwrap();
+        if packed_tasks.is_none() {
+            return None;
+        }
+        let tasks = packed_tasks.unwrap();
+        let unpacked: Result<Vec<Task>, serde_json::error::Error> = serde_json::from_str(&tasks);
+        if unpacked.is_err() {
+            error!(
+                "could not deserialize: '{}' with {:?}",
+                tasks,
+                unpacked.unwrap_err()
+            );
+            return None;
+        }
+        return Some(unpacked.unwrap());
+    }
+
     pub fn refresh(&mut self, creep: screeps::Creep) {
         let _source = creep.borrow();
         self.spawning = _source.spawning();
@@ -65,6 +87,9 @@ impl Creep {
         }
         self.pos = _source.pos();
         self.room = _source.room();
+        if let Some(tasks) = self.unpack_tasks(_source) {
+            self.tasks = tasks;
+        }
         self._source = creep;
         self.show_creep_circle();
     }
