@@ -1,3 +1,4 @@
+use crate::tasks::Task;
 use core::borrow::Borrow;
 use screeps::memory::MemoryReference;
 use screeps::HasPosition;
@@ -10,6 +11,7 @@ use screeps::StructureController;
 use screeps::{ConstructionSite, ResourceType, Transferable};
 use std::fmt;
 use stdweb::js;
+
 pub struct Creep {
     _source: screeps::Creep,
     name: String,
@@ -20,6 +22,7 @@ pub struct Creep {
     pos: RoomPosition,
     room: Room,
     job: Job,
+    tasks: Vec<Task>,
 }
 
 impl Creep {
@@ -46,6 +49,7 @@ impl Creep {
             pos,
             room,
             job: Job::from_string(job_name),
+            tasks: vec![],
             _source: creep,
         }
     }
